@@ -10,7 +10,7 @@ let ballRadius = 10; // raio da bola
 let paddleHeight = 10;
 let paddleWidth = 75;
 let paddleX = (canvas.width - paddleWidth) / 2;
-let paddleY = (canvas.height - paddleHeight);
+let paddleY = (canvas.height - paddleHeight) - 20;
 let rightPressed = false;
 let leftPressed = false;
 
@@ -45,8 +45,14 @@ function draw() {
 
   if (rightPressed) {
     paddleX += 7;
+    if (paddleX + paddleWidth > canvas.width) {
+      paddleX = canvas.width - paddleWidth;
+    }
   } else if (leftPressed) {
     paddleX -= 7;
+    if (paddleX < 0) {
+      paddleX = 0;
+    }
   }
 
 
