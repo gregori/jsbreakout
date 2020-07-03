@@ -29,21 +29,21 @@ let bricks = [];
 for (let c = 0; c < brickColumnCount; c++) {
   bricks[c] = [];
   for (let r = 0; r < brickRowCount; r++) {
-    bricks[c][r] = { x: 0, y: 0 };
+    bricks[c][r] = { x: 0, y: 0, visible: true };
   }
 }
 
 function brickCollisionDetection() {
   for (let c = 0; c < brickColumnCount; c++) {
     for (let r = 0; r < brickRowCount; r++) {
-      const brick = bricks[c][r];
+      let brick = bricks[c][r];
 
-      if (brick.x <= x && x <= brick.x + brickWidth && y + ballRadius <= brick.y + brickHeight // bateu embaixo
-        || x - ballRadius <= brick.x + brickWidth && brick.y <= y && y <= brick.y + brickHeight // bateu na direita
-        || x + ballRadius >= brick.x && brick.y <= y && y <= brick.y + brickHeight // bateu na esquerda
-      ) {
-        // colidiu
-        dy = -dy
+      if (brick.visible) {
+        if (brick.x < x && x < brick.x + brickWidth && brick.y < y && y < brick.y + brickHeight) {
+          // colidiu
+          dy = -dy;
+          brick.visible = false;
+        }
       }
     }
   }
@@ -60,11 +60,13 @@ function drawBrick(brickX, brickY) {
 function drawBricks() {
   for (let c = 0; c < brickColumnCount; c++) {
     for (let r = 0; r < brickRowCount; r++) {
-      let brickX = (c * (brickWidth + brickPadding)) + brickOffsetLeft;
-      let brickY = (r * (brickHeight + brickPadding)) + brickOffsetTop;
-      bricks[c][r].x = brickX;
-      bricks[c][r].y = brickY;
-      drawBrick(brickX, brickY);
+      if (bricks[c][r].visible) {
+        let brickX = (c * (brickWidth + brickPadding)) + brickOffsetLeft;
+        let brickY = (r * (brickHeight + brickPadding)) + brickOffsetTop;
+        bricks[c][r].x = brickX;
+        bricks[c][r].y = brickY;
+        drawBrick(brickX, brickY);
+      }
     }
   }
 }
