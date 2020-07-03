@@ -33,6 +33,22 @@ for (let c = 0; c < brickColumnCount; c++) {
   }
 }
 
+function brickCollisionDetection() {
+  for (let c = 0; c < brickColumnCount; c++) {
+    for (let r = 0; r < brickRowCount; r++) {
+      const brick = bricks[c][r];
+
+      if (brick.x <= x && x <= brick.x + brickWidth && y + ballRadius <= brick.y + brickHeight // bateu embaixo
+        || x - ballRadius <= brick.x + brickWidth && brick.y <= y && y <= brick.y + brickHeight // bateu na direita
+        || x + ballRadius >= brick.x && brick.y <= y && y <= brick.y + brickHeight // bateu na esquerda
+      ) {
+        // colidiu
+        dy = -dy
+      }
+    }
+  }
+}
+
 function drawBrick(brickX, brickY) {
   ctx.beginPath();
   ctx.rect(brickX, brickY, brickWidth, brickHeight);
@@ -73,6 +89,7 @@ function draw() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   drawBall();
   drawPaddle();
+  brickCollisionDetection();
   drawBricks();
   // verifica se a bola sai na horizontal
   if (x + dx > canvas.width - ballRadius || x + dx < ballRadius) {
