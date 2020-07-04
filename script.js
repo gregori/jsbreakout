@@ -45,6 +45,11 @@ function brickCollisionDetection() {
           dy = -dy;
           brick.visible = false;
           score++;
+          if (score == brickRowCount * brickColumnCount) { // se for a pontuação máxima
+            alert("Você venceu! Parabéns!");
+            document.location.reload();
+            clearInterval(interval);
+          }
         }
       }
     }
