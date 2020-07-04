@@ -2,16 +2,16 @@ let canvas = document.getElementById("myCanvas");
 let ctx = canvas.getContext("2d");
 
 // bolinha
-let x = canvas.width / 2; // inicial horizontal
-let y = canvas.height - 35; // inicial vertical
-let dx = 2; // variação horizontal
-let dy = -2; // variação vertical;
+let x;
+let y;
+let dx;
+let dy;
 let ballRadius = 10; // raio da bola
 
 // barra
 let paddleHeight = 10;
 let paddleWidth = 75;
-let paddleX = (canvas.width - paddleWidth) / 2;
+let paddleX;
 let paddleY = (canvas.height - paddleHeight) - 10;
 let rightPressed = false;
 let leftPressed = false;
@@ -24,9 +24,12 @@ let brickHeight = 20;
 let brickPadding = 10;
 let brickOffsetTop = 30;
 let brickOffsetLeft = 30;
+
+// pontuação e vidas
 let score = 0;
 let lives = 3;
 
+// inicializar os tijolos
 let bricks = [];
 for (let c = 0; c < brickColumnCount; c++) {
   bricks[c] = [];
@@ -34,6 +37,16 @@ for (let c = 0; c < brickColumnCount; c++) {
     bricks[c][r] = { x: 0, y: 0, visible: true };
   }
 }
+
+function setupBallAndPaddle() {
+  x = canvas.width / 2; // inicial horizontal
+  y = canvas.height - 35; // inicial vertical
+  dx = 4; // variação horizontal
+  dy = -4; // variação vertical;
+  paddleX = (canvas.width - paddleWidth) / 2;
+}
+
+setupBallAndPaddle();
 
 function brickCollisionDetection() {
   for (let c = 0; c < brickColumnCount; c++) {
@@ -49,7 +62,6 @@ function brickCollisionDetection() {
           if (score == brickRowCount * brickColumnCount) { // se for a pontuação máxima
             alert("Você venceu! Parabéns!");
             document.location.reload();
-            clearInterval(interval);
           }
         }
       }
@@ -129,13 +141,8 @@ function draw() {
     if (lives == 0) {
       alert("Game Over!");
       document.location.reload();
-      clearInterval(interval);
     } else { // reseta o estado da bola e da barra - jogador morreu!
-      x = canvas.width / 2; // inicial horizontal
-      y = canvas.height - 35; // inicial vertical
-      dx = 2; // variação horizontal
-      dy = -2; // variação vertical;
-      paddleX = (canvas.width - paddleWidth) / 2;
+      setupBallAndPaddle();
     }
   }
 
@@ -153,8 +160,11 @@ function draw() {
 
   x += dx;
   y += dy;
+
+  requestAnimationFrame(draw);
 }
-let interval = setInterval(draw, 10);
+
+draw();
 
 function keyDownHandler(e) {
   if (e.key == "Right" || e.key == "ArrowRight") {
