@@ -25,6 +25,7 @@ let brickPadding = 10;
 let brickOffsetTop = 30;
 let brickOffsetLeft = 30;
 let score = 0;
+let lives = 3;
 
 let bricks = [];
 for (let c = 0; c < brickColumnCount; c++) {
@@ -60,6 +61,12 @@ function drawScore() {
   ctx.font = "16px Arial";
   ctx.fillStyle = "#0095DD";
   ctx.fillText("Pontuação: " + score, 8, 20);
+}
+
+function drawLives() {
+  ctx.font = "16px Arial";
+  ctx.fillStyle = "#0095DD";
+  ctx.fillText("Vidas: " + lives, canvas.width - 65, 20);
 }
 
 function drawBrick(brickX, brickY) {
@@ -106,6 +113,7 @@ function draw() {
   drawPaddle();
   brickCollisionDetection();
   drawScore();
+  drawLives();
   drawBricks();
   // verifica se a bola sai na horizontal
   if (x + dx > canvas.width - ballRadius || x + dx < ballRadius) {
@@ -117,9 +125,18 @@ function draw() {
     y + ballRadius >= paddleY) {
     dy = -dy;
   } else if (y + dy > canvas.height - ballRadius) {
-    alert("Game Over!");
-    document.location.reload();
-    clearInterval(interval);
+    lives--; // perde uma vida
+    if (lives == 0) {
+      alert("Game Over!");
+      document.location.reload();
+      clearInterval(interval);
+    } else { // reseta o estado da bola e da barra - jogador morreu!
+      x = canvas.width / 2; // inicial horizontal
+      y = canvas.height - 35; // inicial vertical
+      dx = 2; // variação horizontal
+      dy = -2; // variação vertical;
+      paddleX = (canvas.width - paddleWidth) / 2;
+    }
   }
 
   if (rightPressed) {
