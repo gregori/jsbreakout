@@ -24,6 +24,7 @@ let brickHeight = 20;
 let brickPadding = 10;
 let brickOffsetTop = 30;
 let brickOffsetLeft = 30;
+let score = 0;
 
 let bricks = [];
 for (let c = 0; c < brickColumnCount; c++) {
@@ -43,10 +44,17 @@ function brickCollisionDetection() {
           // colidiu
           dy = -dy;
           brick.visible = false;
+          score++;
         }
       }
     }
   }
+}
+
+function drawScore() {
+  ctx.font = "16px Arial";
+  ctx.fillStyle = "#0095DD";
+  ctx.fillText("Pontuação: " + score, 8, 20);
 }
 
 function drawBrick(brickX, brickY) {
@@ -92,6 +100,7 @@ function draw() {
   drawBall();
   drawPaddle();
   brickCollisionDetection();
+  drawScore();
   drawBricks();
   // verifica se a bola sai na horizontal
   if (x + dx > canvas.width - ballRadius || x + dx < ballRadius) {
